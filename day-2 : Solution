@@ -1,0 +1,20 @@
+2561. Rearranging Fruits
+  Solution:
+from collections import Counter
+from typing import List
+
+class Solution:
+    def minCost(self, x: List[int], y: List[int]) -> int:
+        z = Counter(x)
+        for a in y:
+            z[a] -= 1
+        
+        diff = []
+        for k, v in z.items():
+            if v % 2 != 0:
+                return -1
+            diff += [k] * abs(v // 2)
+        
+        m = min(x + y)
+        diff.sort()
+        return sum(min(2 * m, val) for val in diff[:len(diff)//2])
