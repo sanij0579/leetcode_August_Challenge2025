@@ -1,0 +1,16 @@
+2106. Maximum Fruits Harvested After at Most K Steps
+Solution:
+class Solution:
+    def maxTotalFruits(self, fruits, startPos: int, k: int) -> int:
+        x = total = z = 0
+        for y in range(len(fruits)):
+            total += fruits[y][1]
+            while x <= y and min(
+                abs(startPos - fruits[x][0]) + fruits[y][0] - fruits[x][0],
+                abs(startPos - fruits[y][0]) + fruits[y][0] - fruits[x][0]
+            ) > k:
+                total -= fruits[x][1]
+                x += 1
+            z = max(z, total)
+        return z
+        
