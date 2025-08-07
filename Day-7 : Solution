@@ -1,0 +1,43 @@
+3363. Find the Maximum Number of Fruits Collected
+Solution:
+from typing import List
+
+class Solution:
+    def maxCollectedFruits(self, fruits: List[List[int]]) -> int:
+        n = len(fruits)
+        total = sum(fruits[i][i] for i in range(n))
+
+        x = [0] * 3  # was right_path
+        x[0] = fruits[0][n - 1]
+
+        y = [0] * 3  # was bottom_path
+        y[0] = fruits[n - 1][0]
+
+        z = 2  # was window
+
+        for step in range(1, n - 1):
+            new_x = [0] * (z + 2)
+            new_y = [0] * (z + 2)
+
+            for d in range(z):
+                # Update new_x (right path)
+                left = x[d - 1] if d - 1 >= 0 else 0
+                mid = x[d]
+                right = x[d + 1] if d + 1 < len(x) else 0
+                new_x[d] = max(left, mid, right) + fruits[step][n - 1 - d]
+
+                # Update new_y (bottom path)
+                left = y[d - 1] if d - 1 >= 0 else 0
+                mid = y[d]
+                right = y[d + 1] if d + 1 < len(y) else 0
+                new_y[d] = max(left, mid, right) + fruits[n - 1 - d][step]
+
+            x = new_x
+            y = new_y
+
+            if z - n + 4 + step <= 1:
+                z += 1
+            elif z - n + 3 + step > 1:
+                z -= 1
+
+        return total + x[0] + y[0]
