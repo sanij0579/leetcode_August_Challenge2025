@@ -1,0 +1,32 @@
+2787. Ways to Express an Integer as Sum of Powers
+Solution:
+class Solution:
+    def numberOfWays(self, n: int, x: int) -> int:
+        MOD = 10**9 + 7
+        
+        # Precompute all possible powers <= n
+        powers = []
+        base = 1
+        while base ** x <= n:
+            powers.append(base ** x)
+            base += 1
+        
+        from functools import lru_cache
+        
+        @lru_cache(None)
+        def dfs(i, total):
+            # Base case: exact sum
+            if total == n:
+                return 1
+            # Out of range or overshoot
+            if total > n or i == len(powers):
+                return 0
+            
+            # Choice 1: take powers[i]
+            take = dfs(i + 1, total + powers[i])
+            # Choice 2: skip powers[i]
+            skip = dfs(i + 1, total)
+            
+            return (take + skip) % MOD
+        
+        return dfs(0, 0)
