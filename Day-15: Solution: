@@ -1,0 +1,13 @@
+342. Power of Four
+Solution:
+class Solution:
+    def isPowerOfFour(self, n: int) -> bool:
+        # Must be positive
+        if n <= 0:
+            return False
+        # Check power of two: only one bit set
+        if n & (n - 1) != 0:
+            return False
+        # Check that the only set bit is at an even position
+        # 0x55555555 = binary pattern 010101010101... (only even positions set)
+        return (n & 0x55555555) != 0
