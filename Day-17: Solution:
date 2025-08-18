@@ -1,0 +1,38 @@
+679. 24 Game
+Solution:
+
+from typing import List
+
+class Solution:
+    def judgePoint24(self, cards: List[int]) -> bool:
+        EPSILON = 1e-6
+
+        def backtrack(nums):
+            # If only one number left, check if it's close to 24
+            if len(nums) == 1:
+                return abs(nums[0] - 24) < EPSILON
+            
+            # Try every pair of numbers
+            n = len(nums)
+            for i in range(n):
+                for j in range(n):
+                    if i != j:
+                        # Remaining numbers after choosing i, j
+                        next_nums = [nums[k] for k in range(n) if k != i and k != j]
+
+                        # Try all operations
+                        for op in self.compute(nums[i], nums[j]):
+                            if backtrack(next_nums + [op]):
+                                return True
+            return False
+
+        return backtrack(cards)
+
+    def compute(self, a, b):
+        """Generate all possible results of a and b with operators."""
+        results = [a + b, a - b, b - a, a * b]
+        if abs(b) > 1e-6:  # avoid division by zero
+            results.append(a / b)
+        if abs(a) > 1e-6:
+            results.append(b / a)
+        return results
