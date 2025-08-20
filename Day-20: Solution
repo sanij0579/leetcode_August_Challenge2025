@@ -1,0 +1,22 @@
+1277. Count Square Submatrices with All Ones
+Solution:
+from typing import List
+
+class Solution:
+    def countSquares(self, matrix: List[List[int]]) -> int:
+        rows, cols = len(matrix), len(matrix[0])
+        total_squares = 0
+        
+        for i in range(rows):
+            for j in range(cols):
+                # Skip first row and first column as they remain same
+                if matrix[i][j] == 1 and i > 0 and j > 0:
+                    matrix[i][j] = 1 + min(
+                        matrix[i-1][j],      # top
+                        matrix[i][j-1],      # left
+                        matrix[i-1][j-1]     # top-left diagonal
+                    )
+                # Add current cell's square count
+                total_squares += matrix[i][j]
+        
+        return total_squares
