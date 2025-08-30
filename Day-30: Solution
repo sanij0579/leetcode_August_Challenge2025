@@ -1,0 +1,37 @@
+
+36. Valid Sudoku
+Solution:
+class Solution:
+    # Step 1  Traverse the board
+    def isValidSudoku(self, board: list[list[str]]) -> bool:
+        for row in range(9):
+            for col in range(9):
+                if board[row][col] != '.':
+                    # Step 2, 3, 4  Validate the digit
+                    if not self.isSafe(board, row, col, board[row][col]):
+                        # Step 6  If any check fails
+                        return False
+        # Step 6  If all cells are valid
+        return True
+
+    def isSafe(self, sudoku: list[list[str]], row: int, col: int, digit: str) -> bool:
+        # Step 2  Check the row
+        for i in range(9):
+            if i != col and sudoku[row][i] == digit:
+                return False
+
+        # Step 3  Check the column
+        for i in range(9):
+            if i != row and sudoku[i][col] == digit:
+                return False
+
+        # Step 4  Check the 3x3 subgrid
+        subgridStartRow = (row // 3) * 3
+        subgridStartCol = (col // 3) * 3
+        for i in range(subgridStartRow, subgridStartRow + 3):
+            for j in range(subgridStartCol, subgridStartCol + 3):
+                if (i != row or j != col) and sudoku[i][j] == digit:
+                    return False
+
+        # Step 5  Current cell is valid
+        return True
